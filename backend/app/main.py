@@ -11,7 +11,11 @@ from app.models.interaction import Interaction
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="AI CRM HCP API",
+    docs_url="/docs",
+    openapi_url="/openapi.json",
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,6 +29,11 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     message: str
     interaction: Dict = Field(default_factory=dict)
+
+
+@app.get("/")
+def health_check():
+    return {"status": "ok"}
 
 
 @app.post("/chat")
